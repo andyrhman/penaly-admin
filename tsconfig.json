@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "src/components/Charts/ChartOne.js", "src/components/Charts/ChartThree.js", "src/components/Charts/ChartTwo.js", "src/components/Charts/index.js", "src/components/Charts/CardDataStats.js", "src/components/Chat/ChatCard.js", "src/components/common/Loader/index.js", "src/components/Checkboxes/CheckboxFive.js", "src/components/Checkboxes/CheckboxFour.js", "src/components/Checkboxes/CheckboxOne.js", "src/components/Checkboxes/CheckboxThree.js", "src/components/Checkboxes/CheckboxTwo.js", "src/components/Switchers/SwitcherFour.js", "src/components/Switchers/SwitcherOne.js", "src/components/Switchers/SwitcherThree.js", "src/components/Switchers/SwitcherTwo.js", "src/components/SelectGroup/SelectGroupOne.js", "src/components/SelectGroup/SelectGroupTwo.js", "src/components/FormElements/DatePicker/DatePickerOne.js", "src/components/FormElements/DatePicker/DatePickerTwo.js", "src/pages/profile/index.js", "src/pages/settings/index.jsx", "src/pages/forms/form-elements/index.js", "src/pages/forms/form-layout/index.js", "src/pages/auth/signin/index.jsx", "src/pages/auth/signup/index.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

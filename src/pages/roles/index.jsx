@@ -5,16 +5,15 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import Layout from '../../components/Layout';
 import SEO from "../../components/SEO";
-import FormatDate from "../../services/format-time";
 import TablePagination from '@mui/material/TablePagination';
 import Link from "next/link";
 import DeleteNotification from "../../components/Modals/Delete";
 import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Users = () => {
-    const pageTitle = `Pengguna | ${process.env.siteTitle}`;
-    const [users, setUsers] = useState([]);
+const Roles = () => {
+    const pageTitle = `Peran & Perizinan | ${process.env.siteTitle}`;
+    const [roles, setRoles] = useState([]);
     const [filters, setFilters] = useState({
         s: ''
     })
@@ -22,6 +21,7 @@ const Users = () => {
     const [page, setPage] = useState(0);
     const [perPage, setPerPage] = useState(10);
     const router = useRouter();
+
 
     useEffect(() => {
         const deleteSuccess = sessionStorage.getItem('deleteSuccess');
@@ -49,8 +49,8 @@ const Users = () => {
                     if (filters.s) {
                         arr.push(`search=${filters.s}`)
                     }
-                    const { data: user } = await axios.get(`users?${arr.join('&')}`);
-                    setUsers(user);
+                    const { data: role } = await axios.get(`roles?${arr.join('&')}`);
+                    setRoles(role);
                     setPage(0);
                 } catch (error) {
                     if (error.response && [401, 403].includes(error.response.status)) {
@@ -69,20 +69,20 @@ const Users = () => {
         })
     }
 
-    const [userId, setUserId] = useState(null);
+    const [roleId, setRoleId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const handleOpenDialog = () => setOpenDialog(!openDialog);
 
     const handleConfirmDelete = async () => {
-        await axios.delete(`users/${userId}`);
-        setUsers(users.filter((u) => u.id !== userId));
+        await axios.delete(`roles/${roleId}`);
+        setRoles(roles.filter((u) => u.id !== roleId));
         handleOpenDialog();
         sessionStorage.setItem('deleteSuccess', '1');
         window.location.reload();
     };
 
     const del = (id) => {
-        setUserId(id);
+        setRoleId(id);
         handleOpenDialog();
     };
 
@@ -91,16 +91,16 @@ const Users = () => {
             <SEO title={pageTitle} />
             <DefaultLayout>
                 <Breadcrumb pageName="Pengguna" />
-                <DeleteNotification open={openDialog} handleOpenDelete={handleOpenDialog} handleConfirmDelete={handleConfirmDelete}/>
+                <DeleteNotification open={openDialog} handleOpenDelete={handleOpenDialog} handleConfirmDelete={handleConfirmDelete} />
                 <div className="flex flex-col gap-10">
                     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                         <div className="flex items-center justify-between mb-3">
-                            <Link href={'/users/create'} className="inline-flex items-center justify-center rounded-md bg-primary px-2 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
-                                Buat Pengguna
+                            <Link href={'/roles/create'} className="inline-flex items-center justify-center rounded-md bg-primary px-2 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
+                                Buat Peran
                             </Link>
                             <input
                                 type="text"
-                                placeholder="Cari Pengguna"
+                                placeholder="Cari Peran"
                                 className="rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                 onChange={(e) => search(e.target.value)}
                             />
@@ -112,61 +112,22 @@ const Users = () => {
                                         <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                                             Nama
                                         </th>
-                                        <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                                            Username
-                                        </th>
-                                        <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                                            Email
-                                        </th>
-                                        <th className="px-4 py-4 font-medium text-black dark:text-white">
-                                            Bergabung
-                                        </th>
-                                        <th className="px-4 py-4 font-medium text-black dark:text-white">
-                                            Peran
-                                        </th>
                                         <th className="px-4 py-4 font-medium text-black dark:text-white">
                                             Action
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.slice(page * perPage, (page + 1) * perPage).map((user, index) => (
+                                    {roles.slice(page * perPage, (page + 1) * perPage).map((r, index) => (
                                         <tr key={index}>
                                             <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                                                 <h5 className="font-medium text-black dark:text-white">
-                                                    {user.namaLengkap}
+                                                    {r.nama}
                                                 </h5>
                                             </td>
                                             <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p className="text-black dark:text-white">
-                                                    {user.username}
-                                                </p>
-                                            </td>
-                                            <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p className="text-black dark:text-white">
-                                                    {user.email}
-                                                </p>
-                                            </td>
-                                            <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p className="text-black dark:text-white">
-                                                    <FormatDate timestamp={user.dibuat_pada} />
-                                                </p>
-                                            </td>
-                                            <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p
-                                                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${user.role.nama === "Admin"
-                                                        ? "bg-danger text-danger"
-                                                        : user.role.nama === "Editor"
-                                                            ? "bg-success text-success"
-                                                            : "bg-warning text-warning"
-                                                        }`}
-                                                >
-                                                    {user.role.nama}
-                                                </p>
-                                            </td>
-                                            <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                                 <div className="flex items-center space-x-3.5">
-                                                    <Link href={`/users/show/${user.id}`} className="hover:text-primary">
+                                                    <Link href={`/roles/show/${r.id}`} className="hover:text-primary">
                                                         <svg
                                                             className="fill-current"
                                                             width="18"
@@ -185,13 +146,13 @@ const Users = () => {
                                                             />
                                                         </svg>
                                                     </Link>
-                                                    <Link href={`/users/edit/${user.id}`} className="hover:text-primary">
+                                                    <Link href={`/roles/edit/${r.id}`} className="hover:text-primary">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 17 17">
                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                             <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                         </svg>
                                                     </Link>
-                                                    <button className="hover:text-primary" onClick={() => del(user.id)}>
+                                                    <button className="hover:text-primary" onClick={() => del(r.id)}>
                                                         <svg
                                                             className="fill-current"
                                                             width="18"
@@ -226,7 +187,7 @@ const Users = () => {
                                 <tfoot>
                                     <tr>
                                         <TablePagination
-                                            count={users.length}
+                                            count={roles.length}
                                             page={page}
                                             onPageChange={(e, newPage) => setPage(newPage)}
                                             rowsPerPage={perPage}
@@ -244,4 +205,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Roles;

@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <Layout>
       <Provider store={store}>
-
         <ToastContainer />
         <Component {...pageProps} />
       </Provider>

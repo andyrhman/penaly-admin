@@ -8,6 +8,7 @@ import ButtonSpinner from '../../components/common/ButtonSpinner';
 import Link from 'next/link';
 import Image from 'next/image';
 import ImageUploadArticle from '../../components/Uploads/ImageUploadArticle';
+import { Editor } from '@tinymce/tinymce-react';
 import { useRouter } from 'next/router';
 import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -191,12 +192,26 @@ const CreateUser = () => {
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                                             Isi Konten
                                         </label>
-                                        <textarea
-                                            onChange={(e) => setDeskripsiPanjang(e.target.value)}
-                                            rows={6}
-                                            placeholder="Masukkan Isi Konten"
-                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        ></textarea>
+                                        <Editor
+                                            apiKey={process.env.NEXT_PUBLIC_TINY_MCE}
+                                            value={deskripsi_panjang}
+                                            init={{
+                                                height: 500,
+                                                menubar: true,
+                                                plugins: [
+                                                    "advlist", "autolink", "link", "image", "lists", "charmap", "print", "preview", "hr", "anchor", "pagebreak",
+                                                    "searchreplace", "wordcount", "visualblocks", "visualchars", "code", "fullscreen", "insertdatetime", "media", "nonbreaking",
+                                                    "save", "table", "directionality", "emoticons", "template", "paste", "textpattern", "codesample"
+                                                ],
+                                                toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                                                    'bullist numlist outdent indent | link image ',
+                                                toolbar2: 'print preview media | forecolor backcolor emoticons | code codesample',
+                                                toolbar_mode: 'floating',
+                                                tinycomments_mode: 'embedded',
+                                                tinycomments_author: 'Author name',
+                                            }}
+                                            onEditorChange={(content) => setDeskripsiPanjang(content)}
+                                        />
                                     </div>
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">

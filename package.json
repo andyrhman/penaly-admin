@@ -17,6 +17,7 @@
     "@mui/material": "^5.16.4",
     "@mui/x-data-grid": "^7.11.0",
     "@reduxjs/toolkit": "^2.2.6",
+    "@tinymce/tinymce-react": "^5.1.1",
     "apexcharts": "^3.51.0",
     "axios": "^1.7.2",
     "flatpickr": "^4.6.13",

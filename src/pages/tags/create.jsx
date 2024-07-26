@@ -51,7 +51,6 @@ const CreateTags = () => {
         } finally {
             setLoading(false);
         }
-
     }
     const pageTitle = `Buat Tag | ${process.env.siteTitle}`;
     return (

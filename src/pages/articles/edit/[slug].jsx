@@ -5,45 +5,45 @@ import axios from "axios";
 import DefaultLayout from "../../../components/Layouts/DefaultLayout";
 import Layout from '../../../components/Layout';
 import SEO from "../../../components/SEO";
-import FormatDate from "../../../services/format-time";
 import Image from "next/image";
 import Link from "next/link";
 import UpdateError from "../../../components/Alerts/UpdateError";
 import * as sanitizeHtml from 'sanitize-html';
-import SelectRole from "../../../components/SelectGroup/SelectRole";
-import ImageUploadUser from "../../../components/Uploads/ImageUploadUser";
+import ImageUploadArticle from "../../../components/Uploads/ImageUploadArticle";
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonSpinner from "../../../components/common/ButtonSpinner";
+import SelectTag from "../../../components/SelectGroup/SelectTag";
 
 const EditUser = () => {
-
-    const [nama, setNama] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [image, setImage] = useState('');
-    const [createDate, setCreatedDate] = useState('');
-    const [role_id, setRoleId] = useState('');
-    const [roles, setRoles] = useState([]);
+    const [id, setId] = useState('');
+    const [title, setTitle] = useState('');
+    const [deskripsi_kecil, setDeskripsiKecil] = useState('');
+    const [deskripsi_panjang, setDeskripsiPanjang] = useState('');
+    const [estimasi_membaca, setEstimasiMembaca] = useState('');
+    const [gambar, setGambar] = useState('');
+    const [tag_id, setTagId] = useState('');
+    const [tags, setTags] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const { id } = router.query;
+    const { slug } = router.query;
 
     useEffect(() => {
-        if (id) {
+        if (slug) {
             (
                 async () => {
                     try {
-                        const { data: roles } = await axios.get('roles');
-                        setRoles(roles);
+                        const { data: t } = await axios.get('tags');
+                        setTags(t);
 
-                        const { data } = await axios.get(`users/${id}`);
-                        setNama(data.namaLengkap);
-                        setUsername(data.username);
-                        setEmail(data.email);
-                        setImage(data.foto);
-                        setCreatedDate(data.dibuat_pada);
-                        setRoleId(data.role.id);
+                        const { data } = await axios.get(`articles/${slug}`);
+                        setId(data.id)
+                        setTitle(data.title);
+                        setDeskripsiKecil(data.deskripsi_kecil);    
+                        setDeskripsiPanjang(data.deskripsi_panjang);
+                        setGambar(data.gambar);
+                        setEstimasiMembaca(data.estimasi_membaca);
+                        setTagId(data.tag_id);
                     } catch (error) {
                         if (error.response && [401, 403].includes(error.response.status)) {
                             router.push('/login');
@@ -52,14 +52,14 @@ const EditUser = () => {
                 }
             )();
         }
-    }, [router, id]);
+    }, [router, slug]);
 
     const ref = useRef(null);
     const updateImage = (url) => {
         if (ref.current) {
             ref.current.value = url;
         }
-        setImage(url);
+        setGambar   (url);
     }
 
     useEffect(() => {
@@ -86,12 +86,13 @@ const EditUser = () => {
         setError('');
 
         try {
-            await axios.put(`users/${id}`, {
-                namaLengkap: nama,
-                username,
-                email,
-                foto: image,
-                role_id
+            await axios.put(`articles/${id}`, {
+                title,
+                deskripsi_kecil,
+                deskripsi_panjang,
+                estimasi_membaca,
+                gambar,
+                tag_id
             });
             sessionStorage.setItem('updateBerhasil', '1');
             window.location.reload();
@@ -106,14 +107,14 @@ const EditUser = () => {
         }
     }
 
-    const pageTitle = `Edit ${sanitizeHtml(nama)}| ${process.env.siteTitle}`;
+    const pageTitle = `Edit ${sanitizeHtml(title)}| ${process.env.siteTitle}`;
 
     return (
         <Layout>
             <SEO title={pageTitle} />
             <DefaultLayout>
                 <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <Link href="/users" className="flex items-center space-x-2">
+                    <Link href="/articles" className="flex items-center space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                         </svg>
@@ -128,14 +129,14 @@ const EditUser = () => {
                                     <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                                         <div className="relative drop-shadow-2">
                                             <Image
-                                                src={image}
+                                                src={gambar}
                                                 width={160}
                                                 height={160}
                                                 style={{
                                                     width: "auto",
                                                     height: "auto",
                                                 }}
-                                                alt={nama}
+                                                alt={title}
                                             />
                                             <label
                                                 htmlFor="profile"
@@ -162,54 +163,57 @@ const EditUser = () => {
                                                         fill=""
                                                     />
                                                 </svg>
-                                                <ImageUploadUser uploaded={updateImage} />
+                                                <ImageUploadArticle uploaded={updateImage} />
                                             </label>
                                         </div>
                                     </div>
                                     <UpdateError error={error} />
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                            Nama Lengkap
+                                            Judul
                                         </label>
                                         <input
-                                            value={nama}
-                                            onChange={(e) => setNama(e.target.value)}
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
                                             type="text"
                                             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         />
                                     </div>
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                            Username
+                                            Deskripsi
+                                        </label>
+                                        <textarea
+                                            defaultValue={deskripsi_kecil}
+                                            onChange={(e) => setDeskripsiKecil(e.target.value)}
+                                            rows={6}
+                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        ></textarea>
+                                    </div>
+                                    <div>
+                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                            Isi Konten
+                                        </label>
+                                        <textarea
+                                            defaultValue={deskripsi_panjang}
+                                            onChange={(e) => setDeskripsiPanjang(e.target.value)}
+                                            rows={6}
+                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                        ></textarea>
+                                    </div>
+                                    <div>
+                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                                            Estimasi Membaca
                                         </label>
                                         <input
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
+                                            value={estimasi_membaca}
+                                            onChange={(e) => setEstimasiMembaca(e.target.value)}
                                             type="text"
                                             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         />
                                     </div>
                                     <div>
-                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                            Email
-                                        </label>
-                                        <input
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            type="email"
-                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-                                    <div>
-                                        <SelectRole nama_role={role_id} roles={roles} onChange={(value) => setRoleId(value)} />
-                                    </div>
-                                    <div>
-                                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                                            Bergabung Pada
-                                        </label>
-                                        <h3 className="font-medium text-black dark:text-white">
-                                            <FormatDate timestamp={createDate} />
-                                        </h3>
+                                        <SelectTag nama_tag={tag_id} tags={tags} onChange={(value) => setTagId(value)} />
                                     </div>
                                     <br />
                                 </form>

@@ -11,12 +11,14 @@ import * as sanitizeHtml from 'sanitize-html';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ShowUser = () => {
+    const [id, setId] = useState('');
     const [title, setTitle] = useState('');
     const [deskripsi_kecil, setDeskripsiKecil] = useState('');
     const [deskripsi_panjang, setDeskripsiPanjang] = useState('');
     const [estimasi_membaca, setEstimasiMembaca] = useState('');
     const [gambar, setGambar] = useState('');
     const [tag_id, setTagId] = useState('');
+    const [isLiked, setIsLiked] = useState(false);
     const router = useRouter();
     const { slug } = router.query;
 
@@ -26,12 +28,16 @@ const ShowUser = () => {
                 async () => {
                     try {
                         const { data } = await axios.get(`articles/${slug}`);
+                        setId(data.id);
                         setTitle(data.title);
                         setDeskripsiKecil(data.deskripsi_kecil);
                         setDeskripsiPanjang(data.deskripsi_panjang);
                         setEstimasiMembaca(data.estimasi_membaca)
                         setGambar(data.gambar);
                         setTagId(data.tag);
+
+                        const likeStatus = await axios.get(`articles/like/${data.id}`);
+                        setIsLiked(likeStatus.data.message === "True");
                     } catch (error) {
                         if (error.response && [401, 403].includes(error.response.status)) {
                             router.push('/login');
@@ -41,6 +47,21 @@ const ShowUser = () => {
             )();
         }
     }, [router, slug]);
+
+    const handleLike = async () => {
+        try {
+            if (isLiked) {
+                await axios.put(`articles/dislike/${id}`);
+                setIsLiked(false);
+            } else {
+                await axios.put(`articles/like/${id}`);
+                setIsLiked(true);
+            }
+        } catch (error) {
+            console.error('Failed to like the article', error);
+        }
+    };
+
     const pageTitle = `Detail ${sanitizeHtml(title)} | ${process.env.siteTitle}`;
 
     return (
@@ -116,6 +137,16 @@ const ShowUser = () => {
                                     </h3>
                                 </div>
                                 <br />
+                                <div className="relative z-30 mx-auto -mt-22 max-w-full rounded-full bg-white/20 p-1 backdrop-blur sm:h-full sm:max-w-full sm:p-3">
+                                    <div
+                                        className="relative drop-shadow-2 cursor-pointer hover:opacity-75"
+                                        onClick={handleLike}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className={`h-12 w-12 bi bi-heart-fill ${isLiked ? 'text-[#CD5D5D]' : 'text-gray-500'}`} viewBox="0 0 18 18">
+                                            <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

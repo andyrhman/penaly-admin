@@ -16,7 +16,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import ButtonSpinner from "../../../components/common/ButtonSpinner";
 
 const EditUser = () => {
-
     const [nama, setNama] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');

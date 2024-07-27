@@ -297,7 +297,7 @@ const SignIn = () => {
                               </g>
                             </svg>
                           </span>
-                          {passwordError && <div className="text-red-500 text-xs mt-1">{passwordError}</div>}
+                          {passwordError && <div className="text-[#B45454] text-xs mt-1">{passwordError}</div>}
                         </div>
                       </div>
 

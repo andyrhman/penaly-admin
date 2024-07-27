@@ -26,6 +26,8 @@ const DefaultLayout = (props) => {
           // Set user data if the user is an admin
           props.setUser({
             id: data.id,
+            namaLengkap: data.namaLengkap,
+            foto: data.foto,
             username: data.username,
             email: data.email,
             role: data.role,

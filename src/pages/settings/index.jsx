@@ -37,8 +37,7 @@ const Settings = ({ user }) => {
           setUsername(user.username);
           setEmail(user.email);
         } catch (error) {
-          if (error.response && error.response.status === 401) {
-            setError('An error occurred');
+          if (error.response && [401, 403].includes(error.response.status)) {
             router.push('/login');
           }
         }

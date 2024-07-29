@@ -176,7 +176,7 @@ const ShowUser = () => {
                                     </div>
                                 </div>
 
-                                <Komentar id={id} slug={slug}/>
+                                <Komentar id={id} />
                             </div>
                         </div>
                     </div>

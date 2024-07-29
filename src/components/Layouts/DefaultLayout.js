@@ -28,6 +28,7 @@ const DefaultLayout = (props) => {
             id: data.id,
             namaLengkap: data.namaLengkap,
             foto: data.foto,
+            bio: data.bio,
             username: data.username,
             email: data.email,
             role: data.role,
@@ -76,7 +77,6 @@ const DefaultLayout = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  // console.log(state.user); // * Always console log first for showing the response data
   return {
     user: state.user.user
   }

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const CreateUser = () => {
+const CreateArticle = () => {
     const defaultImageUrl = `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}uploads/default-article.jpg`;
 
     const [title, setTitle] = useState('');
@@ -286,4 +286,4 @@ const CreateUser = () => {
     );
 };
 
-export default CreateUser;
+export default CreateArticle;

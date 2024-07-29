@@ -39,7 +39,6 @@ const SignIn = () => {
       if (data) {
         router.push('/');
       } else {
-        // Sign-in failed, display an error message
         setError('An error occurred during sign-in');
       }
 
@@ -49,8 +48,6 @@ const SignIn = () => {
       if (error.response && error.response.data && error.response.data.message) {
         const errorMessage = error.response.data.message;
         setError(errorMessage);
-
-        // Set error flags based on the error message
         if (errorMessage.includes('Username or Email')) {
           setUsernameOrEmailError(errorMessage);
         }
@@ -59,7 +56,7 @@ const SignIn = () => {
         }
       }
     } finally {
-      setLoading(false);
+      setLoading(false);  
     }
   };
 
@@ -301,12 +298,45 @@ const SignIn = () => {
                         </div>
                       </div>
 
+                      <div className="mb-5.5 mt-5 flex items-center justify-between">
+                        <label htmlFor="formCheckbox" className="flex cursor-pointer">
+                          <div className="relative pt-0.5">
+                            <input
+                              type="checkbox"
+                              id="formCheckbox"
+                              className="taskCheckbox sr-only"
+                              onChange={(e) => setRememberMe(e.target.checked)} 
+                            />
+                            <div className="box mr-3 flex h-5 w-5 items-center justify-center rounded border border-stroke dark:border-strokedark">
+                              <span className="text-white opacity-0">
+                                <svg
+                                  className="fill-current"
+                                  width="10"
+                                  height="7"
+                                  viewBox="0 0 10 7"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M9.70685 0.292804C9.89455 0.480344 10 0.734667 10 0.999847C10 1.26503 9.89455 1.51935 9.70685 1.70689L4.70059 6.7072C4.51283 6.89468 4.2582 7 3.9927 7C3.72721 7 3.47258 6.89468 3.28482 6.7072L0.281063 3.70701C0.0986771 3.5184 -0.00224342 3.26578 3.785e-05 3.00357C0.00231912 2.74136 0.10762 2.49053 0.29326 2.30511C0.4789 2.11969 0.730026 2.01451 0.992551 2.01224C1.25508 2.00996 1.50799 2.11076 1.69683 2.29293L3.9927 4.58607L8.29108 0.292804C8.47884 0.105322 8.73347 0 8.99896 0C9.26446 0 9.51908 0.105322 9.70685 0.292804Z"
+                                    fill=""
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </div>
+                          <p>Ingat Saya</p>
+                        </label>
+                      </div>
+
                       <div className="mb-5">
                         <button
                           type="submit"
                           className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                         >
-                          {loading ? <svg aria-hidden="true" role="status" class="inline w-8 h-8 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          {loading ? <svg aria-hidden="true" role="status" className="inline w-8 h-8 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
                             <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="#1C64F2" />
                           </svg> : "Login"}

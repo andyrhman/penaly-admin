@@ -4,14 +4,18 @@ import React from 'react'
 const ImageUploadArticle = (props) => {
 
     const upload = async (files) => {
-        if (files === null) return;
+        try {
+            if (files === null) return;
 
-        const formData = new FormData();
-        formData.append('image', files[0]);
-
-        const { data } = await axios.post('upload/articles', formData);
-
-        props.uploaded(data.url);
+            const formData = new FormData();
+            formData.append('image', files[0]);
+    
+            const { data } = await axios.post('upload/articles', formData);
+    
+            props.uploaded(data.url);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

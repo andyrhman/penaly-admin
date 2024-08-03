@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { toast, Slide } from 'react-toastify';
 import { useRouter } from "next/router";
 import axios from "axios";
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb";
@@ -8,7 +9,6 @@ import SEO from "../../components/SEO";
 import TablePagination from '@mui/material/TablePagination';
 import Link from "next/link";
 import DeleteNotification from "../../components/Modals/Delete";
-import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Roles = () => {
@@ -106,7 +106,7 @@ const Roles = () => {
                             />
                         </div>
                         <div className="max-w-full overflow-x-auto">
-                            {tags.length > 0 ? (
+                            {roles.length > 0 ? (
                                 <table className="w-full table-auto">
                                     <thead>
                                         <tr className="bg-gray-2 text-left dark:bg-meta-4">

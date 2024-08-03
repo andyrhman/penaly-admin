@@ -30,14 +30,11 @@ const DropdownUser = ({ user }) => {
 
         <span>
           <Image
-            className="h-14 w-14 rounded-full"
-            width={60}
-            height={60}
+            class="w-8 h-8 rounded-full"
+            width={8}
+            height={8}
+            unoptimized={true}
             src={user?.foto}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
             alt="User"
           />
         </span>

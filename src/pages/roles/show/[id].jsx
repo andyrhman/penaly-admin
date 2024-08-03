@@ -5,9 +5,25 @@ import axios from "axios";
 import DefaultLayout from "../../../components/Layouts/DefaultLayout";
 import Layout from '../../../components/Layout';
 import SEO from "../../../components/SEO";
-import FormatDate from "../../../services/format-time";
 import * as sanitizeHtml from 'sanitize-html';
 import 'react-toastify/dist/ReactToastify.css';
+
+const ConvertPermissionName = (name) => {
+    const translations = {
+        "view_users": "Lihat Pengguna",
+        "edit_users": "Edit Pengguna",
+        "view_roles": "Lihat Peran",
+        "edit_roles": "Edit Peran",
+        "view_articles": "Lihat Artikel",
+        "edit_articles": "Edit Artikel",
+        "view_comments": "Lihat Komentar",
+        "edit_comments": "Edit Komentar",
+        "view_categories": "Lihat Kategori",
+        "edit_categories": "Edit Kategori"
+    };
+
+    return translations[name] || name;
+};
 
 const ShowRole = () => {
     const [name, setName] = useState('');
@@ -89,7 +105,7 @@ const ShowRole = () => {
                                                     id={`permission-${permission.id}`}
                                                 />
                                                 <label htmlFor={`permission-${permission.id}`} className="ml-2">
-                                                    {permission.nama}
+                                                    {ConvertPermissionName(permission.nama)}
                                                 </label>
                                             </div>
                                         ))}

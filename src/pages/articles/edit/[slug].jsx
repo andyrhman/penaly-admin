@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { Slide, toast } from 'react-toastify';
+import { Editor } from '@tinymce/tinymce-react';
 import axios from "axios";
 import DefaultLayout from "../../../components/Layouts/DefaultLayout";
 import Layout from '../../../components/Layout';
@@ -39,7 +40,7 @@ const EditUser = () => {
                         const { data } = await axios.get(`articles/${slug}`);
                         setId(data.id)
                         setTitle(data.title);
-                        setDeskripsiKecil(data.deskripsi_kecil);    
+                        setDeskripsiKecil(data.deskripsi_kecil);
                         setDeskripsiPanjang(data.deskripsi_panjang);
                         setGambar(data.gambar);
                         setEstimasiMembaca(data.estimasi_membaca);
@@ -59,7 +60,7 @@ const EditUser = () => {
         if (ref.current) {
             ref.current.value = url;
         }
-        setGambar   (url);
+        setGambar(url);
     }
 
     useEffect(() => {
@@ -126,21 +127,18 @@ const EditUser = () => {
                         <div className="rounded-sm bg-white">
                             <div className="flex flex-col gap-5.5 p-6.5">
                                 <form>
-                                    <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
-                                        <div className="relative drop-shadow-2">
+                                    <div className="relative flex justify-center items-center">
+                                        <div className="relative flex items-center justify-center drop-shadow-2">
                                             <Image
                                                 src={gambar}
-                                                width={160}
-                                                height={160}
-                                                style={{
-                                                    width: "auto",
-                                                    height: "auto",
-                                                }}
+                                                width={600}
+                                                height={600}
+                                                className="object-cover"
                                                 alt={title}
                                             />
                                             <label
                                                 htmlFor="profile"
-                                                className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
+                                                className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-indigo-600 text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
                                             >
                                                 <svg
                                                     className="fill-current"
@@ -175,6 +173,7 @@ const EditUser = () => {
                                         <input
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
+                                            maxLength={100}
                                             type="text"
                                             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         />
@@ -185,6 +184,7 @@ const EditUser = () => {
                                         </label>
                                         <textarea
                                             defaultValue={deskripsi_kecil}
+                                            maxLength={250}
                                             onChange={(e) => setDeskripsiKecil(e.target.value)}
                                             rows={6}
                                             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -194,12 +194,26 @@ const EditUser = () => {
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                                             Isi Konten
                                         </label>
-                                        <textarea
-                                            defaultValue={deskripsi_panjang}
-                                            onChange={(e) => setDeskripsiPanjang(e.target.value)}
-                                            rows={6}
-                                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        ></textarea>
+                                        <Editor
+                                            apiKey={process.env.NEXT_PUBLIC_TINY_MCE}
+                                            value={deskripsi_panjang}
+                                            init={{
+                                                height: 500,
+                                                menubar: true,
+                                                plugins: [
+                                                    "advlist", "autolink", "link", "image", "lists", "charmap", "print", "preview", "hr", "anchor", "pagebreak",
+                                                    "searchreplace", "wordcount", "visualblocks", "visualchars", "code", "fullscreen", "insertdatetime", "media", "nonbreaking",
+                                                    "save", "table", "directionality", "emoticons", "template", "paste", "textpattern", "codesample"
+                                                ],
+                                                toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                                                    'bullist numlist outdent indent | link image ',
+                                                toolbar2: 'print preview media | forecolor backcolor emoticons | code codesample',
+                                                toolbar_mode: 'floating',
+                                                tinycomments_mode: 'embedded',
+                                                tinycomments_author: 'Author name',
+                                            }}
+                                            onEditorChange={(content) => setDeskripsiPanjang(content)}
+                                        />
                                     </div>
                                     <div>
                                         <label className="mb-3 block text-sm font-medium text-black dark:text-white">

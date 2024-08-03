@@ -5,7 +5,8 @@ import axios from "axios";
 import DefaultLayout from "../../../components/Layouts/DefaultLayout";
 import Layout from '../../../components/Layout';
 import SEO from "../../../components/SEO";
-import FormatDate from "../../../services/format-time";
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css';
 import Image from "next/image";
 import * as sanitizeHtml from 'sanitize-html';
 import 'react-toastify/dist/ReactToastify.css';
@@ -72,12 +73,24 @@ const ShowUser = () => {
     };
 
     const pageTitle = `${sanitizeHtml(title)} | ${process.env.siteTitle}`;
+
     const [isContentVisible, setIsContentVisible] = useState(false);
+
+    useEffect(() => {
+        if (isContentVisible && deskripsi_panjang) {
+            const modifiedContent = deskripsi_panjang.replace(/language-markup/g, 'language-html');
+            document.querySelector('.tinymce-content').innerHTML = modifiedContent;
+            const nodes = document.querySelectorAll('pre code');
+            nodes.forEach(node => hljs.highlightBlock(node));
+        }
+    }, [isContentVisible, deskripsi_panjang]);
+
 
     // * Show / hide content
     const toggleContentVisibility = () => {
         setIsContentVisible(!isContentVisible);
     };
+
     return (
         <Layout>
             <SEO title={pageTitle} />
@@ -91,23 +104,19 @@ const ShowUser = () => {
                     </Link>
                 </div>
                 <div className="flex flex-col gap-10">
-                    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-16 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-6">
+                    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-6">
                         <div className="rounded-sm bg-white">
                             <div className="flex flex-col gap-5.5 p-6.5">
-                                <div className="relative z-30 mx-auto -mt-22 max-w-full rounded-full bg-white/20 p-1 backdrop-blur sm:h-full sm:max-w-full sm:p-3">
-                                    <div className="relative drop-shadow-2">
+                                <div className="relative flex justify-center items-center">
+                                    <div className="relative flex items-center justify-center drop-shadow-2">
                                         <Image
                                             src={gambar}
-                                            className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
-
-                                            width={160}
-                                            height={160}
-                                            style={{
-                                                width: "auto",
-                                                height: "auto",
-                                            }}
+                                            width={600}
+                                            height={600}
+                                            className="object-cover"
                                             alt={title}
                                         />
+
                                     </div>
                                 </div>
                                 <div>
@@ -142,7 +151,7 @@ const ShowUser = () => {
                                     </button>
                                     {isContentVisible && (
                                         <div
-                                            className="font-medium text-black dark:text-white"
+                                            className="tinymce-content"
                                             dangerouslySetInnerHTML={{ __html: deskripsi_panjang }}
                                         />
                                     )}

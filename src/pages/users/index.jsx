@@ -9,6 +9,7 @@ import FormatDate from "../../services/format-time";
 import TablePagination from '@mui/material/TablePagination';
 import Link from "next/link";
 import DeleteNotification from "../../components/Modals/Delete";
+import Image from "next/image";
 import { toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

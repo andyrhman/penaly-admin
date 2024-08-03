@@ -7,6 +7,7 @@ import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import Layout from '../../components/Layout';
 import SEO from "../../components/SEO";
 import TablePagination from '@mui/material/TablePagination';
+import Image from "next/image";
 import Link from "next/link";
 import DeleteNotification from "../../components/Modals/Delete";
 import 'react-toastify/dist/ReactToastify.css';

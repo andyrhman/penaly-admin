@@ -21,6 +21,7 @@ const SEO = ({ title }) => {
             <meta property="og:site_name" content={siteURL} key="ogsitename" />
             <meta property="og:title" content={title} key="ogtitle" />
             <meta property="og:description" content={description} key="ogdesc" />
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
             <title>{title}</title>
 
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />

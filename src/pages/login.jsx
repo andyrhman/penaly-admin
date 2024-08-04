@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import http from '../services/Api';
 import Link from "next/link";
 import Image from "next/image";
 import DefaultLayout from "../components/Layouts/DefaultLayout";
@@ -30,7 +31,7 @@ const SignIn = () => {
     const isEmail = emailRegex.test(usernameOrEmail);
 
     try {
-      const { data } = await axios.post('login', {
+      const { data } = await http.post('login', {
         email: isEmail ? usernameOrEmail : undefined,
         username: isEmail ? undefined : usernameOrEmail,
         password,

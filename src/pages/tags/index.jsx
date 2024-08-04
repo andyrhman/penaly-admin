@@ -74,11 +74,17 @@ const Tags = () => {
     const handleOpenDialog = () => setOpenDialog(!openDialog);
 
     const handleConfirmDelete = async () => {
-        await axios.delete(`tags/${tagId}`);
-        setTags(tags.filter((u) => u.id !== tagId));
-        handleOpenDialog();
-        sessionStorage.setItem('deleteSuccess', '1');
-        window.location.reload();
+        try {
+            await axios.delete(`tags/${tagId}`);
+            setTags(tags.filter((u) => u.id !== tagId));
+            handleOpenDialog();
+            sessionStorage.setItem('deleteSuccess', '1');
+            window.location.reload();
+        } catch (error) {
+            if (error.response && [401, 403].includes(error.response.status)) {
+                router.push('/tags');
+            }
+        }
     };
 
     const del = (id) => {

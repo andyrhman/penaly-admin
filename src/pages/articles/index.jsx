@@ -110,11 +110,17 @@ const Articles = () => {
     const handleOpenDialog = () => setOpenDialog(!openDialog);
 
     const handleConfirmDelete = async () => {
-        await axios.delete(`articles/${articleId}`);
-        setArticles(articles.filter((u) => u.id !== articleId));
-        handleOpenDialog();
-        sessionStorage.setItem('deleteSuccess', '1');
-        window.location.reload();
+        try {
+            await axios.delete(`articles/${articleId}`);
+            setArticles(articles.filter((u) => u.id !== articleId));
+            handleOpenDialog();
+            sessionStorage.setItem('deleteSuccess', '1');
+            window.location.reload();
+        } catch (error) {
+            if (error.response && [401, 403].includes(error.response.status)) {
+                router.push('/articles');
+            }
+        }
     };
 
     const del = (id) => {

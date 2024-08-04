@@ -75,11 +75,17 @@ const Users = () => {
     const handleOpenDialog = () => setOpenDialog(!openDialog);
 
     const handleConfirmDelete = async () => {
-        await axios.delete(`users/${userId}`);
-        setUsers(users.filter((u) => u.id !== userId));
-        handleOpenDialog();
-        sessionStorage.setItem('deleteSuccess', '1');
-        window.location.reload();
+        try {
+            await axios.delete(`users/${userId}`);
+            setUsers(users.filter((u) => u.id !== userId));
+            handleOpenDialog();
+            sessionStorage.setItem('deleteSuccess', '1');
+            window.location.reload();
+        } catch (error) {
+            if (error.response && [401, 403].includes(error.response.status)) {
+                router.push('/users');
+            }
+        }
     };
 
     const del = (id) => {
